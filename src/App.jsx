@@ -39,6 +39,7 @@ function App() {
   const [displayed, setDisplayed] = useState('')
   const fullText = t('hero.title')
   const heroEmoji = '📦✈️🤝'
+  const [menuOpen, setMenuOpen] = useState(false)
 
   // Typing effect for hero title (slower)
   useEffect(() => {
@@ -118,25 +119,48 @@ function App() {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      {/* Hero Section with Parallax, Animated Gradient, Blobs, Particles */}
-      <header className="bg-white sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-4 py-6 flex justify-between items-center">
+      {/* Responsive Header with Hamburger */}
+      <header className="bg-white sticky top-0 z-30 shadow-sm">
+        <div className="max-w-6xl mx-auto px-2 md:px-4 py-4 flex justify-between items-center">
           <div className="text-2xl font-bold text-blue-700 cursor-pointer" onClick={() => scroll.scrollToTop({ smooth: true, duration: 600 })}>{t('brand')}</div>
-          <nav className="space-x-6 flex items-center">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex space-x-6 items-center">
             <ScrollLink to="how-it-works" smooth={true} duration={600} offset={-80} className="text-gray-700 hover:text-blue-700 cursor-pointer">{t('nav.how')}</ScrollLink>
             <ScrollLink to="features" smooth={true} duration={600} offset={-80} className="text-gray-700 hover:text-blue-700 cursor-pointer">{t('nav.features')}</ScrollLink>
             <ScrollLink to="why" smooth={true} duration={600} offset={-80} className="text-gray-700 hover:text-blue-700 cursor-pointer">{t('nav.why')}</ScrollLink>
             <ScrollLink to="faq" smooth={true} duration={600} offset={-80} className="text-gray-700 hover:text-blue-700 cursor-pointer">{t('nav.faq')}</ScrollLink>
             <ScrollLink to="get-started" smooth={true} duration={600} offset={-80} className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800 transition cursor-pointer">{t('nav.getStarted')}</ScrollLink>
           </nav>
+          {/* Hamburger Icon */}
+          <button className="md:hidden flex items-center justify-center p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" onClick={() => setMenuOpen(!menuOpen)} aria-label="Open menu">
+            <span className="sr-only">Open menu</span>
+            <svg className="w-7 h-7 text-blue-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d={menuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 8h16M4 16h16'} />
+            </svg>
+          </button>
         </div>
+        {/* Mobile Menu */}
+        <motion.div
+          initial={false}
+          animate={menuOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className={`md:hidden bg-white shadow-lg overflow-hidden ${menuOpen ? 'border-b border-blue-100' : ''}`}
+        >
+          <div className="flex flex-col items-center gap-2 py-2">
+            <ScrollLink to="how-it-works" smooth={true} duration={600} offset={-80} className="block w-full text-center py-2 text-gray-700 hover:text-blue-700 cursor-pointer" onClick={() => setMenuOpen(false)}>{t('nav.how')}</ScrollLink>
+            <ScrollLink to="features" smooth={true} duration={600} offset={-80} className="block w-full text-center py-2 text-gray-700 hover:text-blue-700 cursor-pointer" onClick={() => setMenuOpen(false)}>{t('nav.features')}</ScrollLink>
+            <ScrollLink to="why" smooth={true} duration={600} offset={-80} className="block w-full text-center py-2 text-gray-700 hover:text-blue-700 cursor-pointer" onClick={() => setMenuOpen(false)}>{t('nav.why')}</ScrollLink>
+            <ScrollLink to="faq" smooth={true} duration={600} offset={-80} className="block w-full text-center py-2 text-gray-700 hover:text-blue-700 cursor-pointer" onClick={() => setMenuOpen(false)}>{t('nav.faq')}</ScrollLink>
+            <ScrollLink to="get-started" smooth={true} duration={600} offset={-80} className="block w-full text-center py-2 bg-blue-700 text-white rounded hover:bg-blue-800 transition cursor-pointer" onClick={() => setMenuOpen(false)}>{t('nav.getStarted')}</ScrollLink>
+          </div>
+        </motion.div>
       </header>
 
-      <div className="relative" ref={heroRef} style={{ minHeight: 480 }}>
+      <div className="relative" ref={heroRef} style={{ minHeight: 320 }}>
         {/* Animated Blobs in Hero with mouse parallax */}
-        <AnimatedBlob className="absolute left-[-80px] top-[-80px] w-60 h-60 z-0" color="#3b82f6" duration={10} parallax={[0.02, 0.01]} />
-        <AnimatedBlob className="absolute right-[-60px] top-20 w-40 h-40 z-0" color="#6366f1" duration={12} delay={2} parallax={[-0.01, 0.02]} />
-        <AnimatedBlob className="absolute left-1/2 bottom-[-100px] w-72 h-72 z-0" color="#60a5fa" duration={14} delay={4} parallax={[0.01, -0.01]} />
+        <AnimatedBlob className="absolute left-[-40px] top-[-40px] w-32 h-32 md:w-60 md:h-60 z-0" color="#3b82f6" duration={10} parallax={[0.02, 0.01]} />
+        <AnimatedBlob className="absolute right-[-30px] top-10 w-20 h-20 md:w-40 md:h-40 z-0" color="#6366f1" duration={12} delay={2} parallax={[-0.01, 0.02]} />
+        <AnimatedBlob className="absolute left-1/2 bottom-[-50px] w-36 h-36 md:w-72 md:h-72 z-0" color="#60a5fa" duration={14} delay={4} parallax={[0.01, -0.01]} />
         <ParticlesBG className="w-full h-full" />
         <Parallax
           bgImage={null}
@@ -145,29 +169,29 @@ function App() {
           bgClassName=""
         >
           <motion.section
-            className="flex-1 flex flex-col items-center justify-center text-center py-32 px-4 bg-gradient-to-b from-blue-50 to-white relative z-10"
+            className="flex-1 flex flex-col items-center justify-center text-center py-16 md:py-32 px-2 md:px-4 bg-gradient-to-b from-blue-50 to-white relative z-10"
             initial="hidden"
             animate="visible"
             variants={fadeInUp}
-            style={{ minHeight: 400 }}
+            style={{ minHeight: 200 }}
           >
-            <motion.h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-lg min-h-[2.5em] flex items-center justify-center gap-2" variants={fadeIn}>
-              {typed ? <>{fullText} <span className="ml-2 text-3xl">{heroEmoji}</span></> : displayed}
+            <motion.h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-lg min-h-[2.5em] flex items-center justify-center gap-2" variants={fadeIn}>
+              {typed ? <>{fullText} <span className="ml-2 text-2xl sm:text-3xl md:text-4xl">{heroEmoji}</span></> : displayed}
               {!typed && <span className="border-r-2 border-blue-700 animate-pulse ml-1" />}
             </motion.h1>
-            <motion.p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl drop-shadow" variants={fadeIn}>{t('hero.desc')}</motion.p>
-            <motion.div className="space-x-4" variants={fadeIn}>
-              <ScrollLink to="get-started" smooth={true} duration={600} offset={-80} className="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-800 transition cursor-pointer backdrop-blur-md bg-opacity-80">{t('hero.getStarted')}</ScrollLink>
-              <ScrollLink to="how-it-works" smooth={true} duration={600} offset={-80} className="text-blue-700 font-semibold hover:underline cursor-pointer">{t('hero.how')}</ScrollLink>
+            <motion.p className="text-base sm:text-lg md:text-xl text-gray-700 mb-8 max-w-xl md:max-w-2xl drop-shadow mx-auto" variants={fadeIn}>{t('hero.desc')}</motion.p>
+            <motion.div className="flex flex-col sm:flex-row gap-4 items-center justify-center" variants={fadeIn}>
+              <ScrollLink to="get-started" smooth={true} duration={600} offset={-80} className="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-800 transition cursor-pointer backdrop-blur-md bg-opacity-80 w-full sm:w-auto text-center">{t('hero.getStarted')}</ScrollLink>
+              <ScrollLink to="how-it-works" smooth={true} duration={600} offset={-80} className="text-blue-700 font-semibold hover:underline cursor-pointer w-full sm:w-auto text-center">{t('hero.how')}</ScrollLink>
             </motion.div>
           </motion.section>
         </Parallax>
       </div>
 
       {/* How It Works */}
-      <motion.section id="how-it-works" className="max-w-5xl mx-auto py-16 px-4" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{t('how.title')}</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+      <motion.section id="how-it-works" className="max-w-5xl mx-auto py-10 md:py-16 px-2 md:px-4" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">{t('how.title')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           <Feature icon="🔵" title={t('how.step1')} desc={t('how.step1desc')} animate glass />
           <Feature icon="🟢" title={t('how.step2')} desc={t('how.step2desc')} animate delay={0.2} glass />
           <Feature icon="🟣" title={t('how.step3')} desc={t('how.step3desc')} animate delay={0.4} glass />
@@ -175,11 +199,11 @@ function App() {
       </motion.section>
 
       {/* Features */}
-      <motion.section id="features" className="bg-blue-50 py-16 px-4 relative overflow-hidden" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+      <motion.section id="features" className="bg-blue-50 py-10 md:py-16 px-2 md:px-4 relative overflow-hidden" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
         {/* Animated background shape */}
-        <AnimatedBlob className="absolute right-[-100px] top-[-80px] w-80 h-80 z-0" color="#a5b4fc" duration={16} delay={1} />
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center relative z-10">{t('features.title')}</h2>
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 relative z-10">
+        <AnimatedBlob className="absolute right-[-50px] top-[-40px] w-40 h-40 md:w-80 md:h-80 z-0" color="#a5b4fc" duration={16} delay={1} />
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center relative z-10">{t('features.title')}</h2>
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10">
           <Feature icon="🔒" title={t('features.auth')} desc={t('features.authDesc')} animate glass />
           <Feature icon="🧳" title={t('features.travel')} desc={t('features.travelDesc')} animate delay={0.1} glass />
           <Feature icon="💬" title={t('features.chat')} desc={t('features.chatDesc')} animate delay={0.2} glass />
@@ -190,11 +214,11 @@ function App() {
       </motion.section>
 
       {/* Why Use */}
-      <motion.section id="why" className="max-w-5xl mx-auto py-16 px-4 relative overflow-hidden" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+      <motion.section id="why" className="max-w-5xl mx-auto py-10 md:py-16 px-2 md:px-4 relative overflow-hidden" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
         {/* Animated background shape */}
-        <AnimatedBlob className="absolute left-[-120px] bottom-[-80px] w-96 h-96 z-0" color="#f472b6" duration={18} delay={2} />
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center relative z-10">{t('why.title')}</h2>
-        <div className="grid md:grid-cols-3 gap-8 relative z-10">
+        <AnimatedBlob className="absolute left-[-60px] bottom-[-40px] w-48 h-48 md:w-96 md:h-96 z-0" color="#f472b6" duration={18} delay={2} />
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center relative z-10">{t('why.title')}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10">
           <Feature icon="💸" title={t('why.save')} desc={t('why.saveDesc')} animate glass />
           <Feature icon="🌍" title={t('why.global')} desc={t('why.globalDesc')} animate delay={0.2} glass />
           <Feature icon="🤝" title={t('why.trust')} desc={t('why.trustDesc')} animate delay={0.4} glass />
@@ -202,19 +226,19 @@ function App() {
       </motion.section>
 
       {/* Call to Action */}
-      <motion.section id="get-started" className="bg-blue-700 py-16 px-4 text-center text-white" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-        <h2 className="text-3xl font-bold mb-4">{t('cta.title')}</h2>
-        <p className="mb-8 text-lg">{t('cta.desc')}</p>
+      <motion.section id="get-started" className="bg-blue-700 py-10 md:py-16 px-2 md:px-4 text-center text-white" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+        <h2 className="text-2xl md:text-3xl font-bold mb-4">{t('cta.title')}</h2>
+        <p className="mb-8 text-base md:text-lg max-w-xl md:max-w-2xl mx-auto">{t('cta.desc')}</p>
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-6">
-          <a href="#" className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-100 transition backdrop-blur-md bg-opacity-80">{t('cta.ios')}</a>
-          <a href="#" className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-100 transition backdrop-blur-md bg-opacity-80">{t('cta.android')}</a>
-          <a href="#" className="bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-800 transition backdrop-blur-md bg-opacity-80">{t('cta.signup')}</a>
+          <a href="#" className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-100 transition backdrop-blur-md bg-opacity-80 w-full md:w-auto text-center">{t('cta.ios')}</a>
+          <a href="#" className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-100 transition backdrop-blur-md bg-opacity-80 w-full md:w-auto text-center">{t('cta.android')}</a>
+          <a href="#" className="bg-blue-900 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-blue-800 transition backdrop-blur-md bg-opacity-80 w-full md:w-auto text-center">{t('cta.signup')}</a>
         </div>
       </motion.section>
 
       {/* FAQ */}
-      <motion.section id="faq" className="max-w-3xl mx-auto py-16 px-4" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">{t('faq.title')}</h2>
+      <motion.section id="faq" className="max-w-3xl mx-auto py-10 md:py-16 px-2 md:px-4" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}>
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 text-center">{t('faq.title')}</h2>
         <div className="space-y-6">
           <FAQItem q={t('faq.q1')} a={t('faq.a1')} glass />
           <FAQItem q={t('faq.q2')} a={t('faq.a2')} glass />
@@ -223,30 +247,30 @@ function App() {
       </motion.section>
 
       {/* Fancy Footer with Particles */}
-      <footer className="bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 text-white py-10 mt-8 relative overflow-hidden">
+      <footer className="bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 text-white py-8 md:py-10 mt-8 relative overflow-hidden text-xs sm:text-sm md:text-base">
         <ParticlesBG className="w-full h-full" />
         <div className="absolute inset-0 opacity-10 pointer-events-none select-none">
           <svg width="100%" height="100%" viewBox="0 0 1440 320" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="#fff" fillOpacity="0.3" d="M0,160L60,170.7C120,181,240,203,360,197.3C480,192,600,160,720,133.3C840,107,960,85,1080,101.3C1200,117,1320,171,1380,197.3L1440,224L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
           </svg>
         </div>
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center relative z-10">
-          <div className="flex items-center gap-3 mb-4 md:mb-0">
-            <span className="text-3xl">🚀</span>
-            <span className="font-bold text-xl">{t('brand')}</span>
+        <div className="max-w-6xl mx-auto px-2 md:px-4 flex flex-col md:flex-row justify-between items-center relative z-10 gap-4 md:gap-0">
+          <div className="flex items-center gap-3 mb-2 md:mb-0">
+            <span className="text-2xl md:text-3xl">🚀</span>
+            <span className="font-bold text-lg md:text-xl">{t('brand')}</span>
           </div>
-          <div className="flex flex-col md:flex-row gap-4 items-center text-sm">
+          <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-center text-xs md:text-sm">
             <span className="flex items-center gap-1"><span role="img" aria-label="mail">📧</span> support@p2pkilo.com</span>
             <span className="flex items-center gap-1"><span role="img" aria-label="phone">📞</span> +251 900 000 000</span>
             <span className="flex items-center gap-1"><span role="img" aria-label="location">📍</span> Addis Ababa, Ethiopia</span>
           </div>
-          <div className="flex gap-4 mt-4 md:mt-0">
-            <a href="#" className="hover:text-blue-300 transition" aria-label="Facebook"><span className="text-2xl">🌐</span></a>
-            <a href="#" className="hover:text-blue-300 transition" aria-label="Twitter"><span className="text-2xl">🐦</span></a>
-            <a href="#" className="hover:text-blue-300 transition" aria-label="Instagram"><span className="text-2xl">📸</span></a>
+          <div className="flex gap-2 md:gap-4 mt-2 md:mt-0">
+            <a href="#" className="hover:text-blue-300 transition" aria-label="Facebook"><span className="text-xl md:text-2xl">🌐</span></a>
+            <a href="#" className="hover:text-blue-300 transition" aria-label="Twitter"><span className="text-xl md:text-2xl">🐦</span></a>
+            <a href="#" className="hover:text-blue-300 transition" aria-label="Instagram"><span className="text-xl md:text-2xl">📸</span></a>
           </div>
         </div>
-        <div className="text-center text-xs text-blue-100 mt-6 relative z-10">
+        <div className="text-center text-[10px] sm:text-xs md:text-sm text-blue-100 mt-4 md:mt-6 relative z-10">
           {t('footer.copyright')} | <span>Made with <span className="text-pink-400">♥</span> by the P2P Kilo Team</span>
         </div>
       </footer>

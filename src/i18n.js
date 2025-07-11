@@ -12,7 +12,7 @@ const resources = {
         getStarted: 'Get Started',
       },
       hero: {
-        title: 'P2P Kilo Sales',
+        title: 'Verlo',
         desc: 'Connecting travelers with package senders. Save money, travel lighter, and send packages easily with our secure, peer-to-peer platform.',
         getStarted: 'Get Started',
         how: 'How It Works',
@@ -69,7 +69,7 @@ const resources = {
       footer: {
         copyright: '© 2025 P2P Kilo Sales. All rights reserved.',
       },
-      brand: 'P2P',
+      brand: 'Verlo',
     },
   },
   am: {
